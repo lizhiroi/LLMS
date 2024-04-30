@@ -61,7 +61,7 @@ namespace LLMS.Properties {
         }
         
         /// <summary>
-        ///   查找类似 DefaultEndpointsProtocol=https;AccountName=fsd10demostorage;AccountKey=5cRdmZTAy6FDUuACQAWDkBdNn9ZAyU3zfvhZZnml6/9y6qWhwBZAmNdunk/7PbjosZHf9HjGjx5b+AStk41HCA==;EndpointSuffix=core.windows.net 的本地化字符串。
+        
         /// </summary>
         internal static string AZURE_STORAGE_CONNECTION_STRING {
             get {

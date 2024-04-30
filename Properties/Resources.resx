@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AZURE_STORAGE_CONNECTION_STRING" xml:space="preserve">
-    <value>DefaultEndpointsProtocol=https;AccountName=fsd10demostorage;AccountKey=5cRdmZTAy6FDUuACQAWDkBdNn9ZAyU3zfvhZZnml6/9y6qWhwBZAmNdunk/7PbjosZHf9HjGjx5b+AStk41HCA==;EndpointSuffix=core.windows.net</value>
+    
   </data>
 </root>
