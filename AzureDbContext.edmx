@@ -1,0 +1,412 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="testdb1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="images">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="image_url" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="description" Type="text" />
+          <Property Name="uploaded_at" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="leases">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="property_id" Type="int" Nullable="false" />
+          <Property Name="tenant_id" Type="int" Nullable="false" />
+          <Property Name="start_date" Type="date" Nullable="false" />
+          <Property Name="end_date" Type="date" Nullable="false" />
+          <Property Name="rent_amount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+          <Property Name="updated_at" Type="datetime" />
+          <Property Name="lease_clauses" Type="text" />
+          <Property Name="payment_due_day" Type="int" Nullable="false" />
+          <Property Name="utility_by_owner" Type="text" />
+          <Property Name="utility_by_tenant" Type="text" />
+          <Property Name="renewal_term" Type="text" />
+          <Property Name="early_terminate_con" Type="text" />
+        </EntityType>
+        <EntityType Name="properties">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="address" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="number_of_units" Type="int" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+          <Property Name="updated_at" Type="datetime" />
+          <Property Name="property_type" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="size_in_sq_ft" Type="int" Nullable="false" />
+          <Property Name="year_built" Type="date" Nullable="false" />
+          <Property Name="rental_price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="amenities" Type="text" />
+          <Property Name="status" Type="int" Nullable="false" />
+          <Property Name="lease_terms" Type="text" Nullable="false" />
+          <Property Name="image_id" Type="int" Nullable="false" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+        <EntityType Name="tenants">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="updated_at" Type="datetime" />
+          <Property Name="first_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="last_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="street_number" Type="nvarchar" MaxLength="10" />
+          <Property Name="street_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="city_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="postcode" Type="nvarchar" MaxLength="10" />
+          <Property Name="province" Type="nvarchar" MaxLength="20" />
+          <Property Name="phone_number" Type="nvarchar" MaxLength="15" />
+          <Property Name="profile_image_id" Type="int" />
+          <Property Name="date_of_birth" Type="date" />
+          <Property Name="emergency_contact_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="emergency_contact_number" Type="nvarchar" MaxLength="15" />
+          <Property Name="national_id" Type="nvarchar" MaxLength="20" />
+          <Property Name="employer_info" Type="nvarchar" MaxLength="100" />
+          <Property Name="bank_info" Type="nvarchar" MaxLength="100" />
+          <Property Name="reference_url" Type="nvarchar" MaxLength="100" />
+          <Property Name="is_verified" Type="bit" />
+          <Property Name="created_at" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_leases_properties">
+          <End Role="properties" Type="Self.properties" Multiplicity="1" />
+          <End Role="leases" Type="Self.leases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="properties">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="leases">
+              <PropertyRef Name="property_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_leases_tenants">
+          <End Role="tenants" Type="Self.tenants" Multiplicity="1" />
+          <End Role="leases" Type="Self.leases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tenants">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="leases">
+              <PropertyRef Name="tenant_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_properties_images">
+          <End Role="images" Type="Self.images" Multiplicity="1" />
+          <End Role="properties" Type="Self.properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="images">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="properties">
+              <PropertyRef Name="image_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tenants_images">
+          <End Role="images" Type="Self.images" Multiplicity="0..1" />
+          <End Role="tenants" Type="Self.tenants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="images">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tenants">
+              <PropertyRef Name="profile_image_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="testdb1ModelStoreContainer">
+          <EntitySet Name="images" EntityType="Self.images" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="leases" EntityType="Self.leases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="properties" EntityType="Self.properties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tenants" EntityType="Self.tenants" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_leases_properties" Association="Self.FK_leases_properties">
+            <End Role="properties" EntitySet="properties" />
+            <End Role="leases" EntitySet="leases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_leases_tenants" Association="Self.FK_leases_tenants">
+            <End Role="tenants" EntitySet="tenants" />
+            <End Role="leases" EntitySet="leases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_properties_images" Association="Self.FK_properties_images">
+            <End Role="images" EntitySet="images" />
+            <End Role="properties" EntitySet="properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tenants_images" Association="Self.FK_tenants_images">
+            <End Role="images" EntitySet="images" />
+            <End Role="tenants" EntitySet="tenants" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="testdb1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="image">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="image_url" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="uploaded_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="properties" Relationship="Self.FK_properties_images" FromRole="images" ToRole="properties" />
+          <NavigationProperty Name="tenants" Relationship="Self.FK_tenants_images" FromRole="images" ToRole="tenants" />
+        </EntityType>
+        <EntityType Name="leas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="property_id" Type="Int32" Nullable="false" />
+          <Property Name="tenant_id" Type="Int32" Nullable="false" />
+          <Property Name="start_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="end_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="rent_amount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="lease_clauses" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="payment_due_day" Type="Int32" Nullable="false" />
+          <Property Name="utility_by_owner" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="utility_by_tenant" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="renewal_term" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="early_terminate_con" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="property" Relationship="Self.FK_leases_properties" FromRole="leases" ToRole="properties" />
+          <NavigationProperty Name="tenant" Relationship="Self.FK_leases_tenants" FromRole="leases" ToRole="tenants" />
+        </EntityType>
+        <EntityType Name="property">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="number_of_units" Type="Int32" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="property_type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="size_in_sq_ft" Type="Int32" Nullable="false" />
+          <Property Name="year_built" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="rental_price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="amenities" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Int32" Nullable="false" />
+          <Property Name="lease_terms" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="image_id" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="image" Relationship="Self.FK_properties_images" FromRole="properties" ToRole="images" />
+          <NavigationProperty Name="leases" Relationship="Self.FK_leases_properties" FromRole="properties" ToRole="leases" />
+        </EntityType>
+        <EntityType Name="tenant">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <Property Name="first_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="street_number" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="street_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="city_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="postcode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="province" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="phone_number" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="profile_image_id" Type="Int32" />
+          <Property Name="date_of_birth" Type="DateTime" Precision="0" />
+          <Property Name="emergency_contact_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="emergency_contact_number" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="national_id" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="employer_info" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="bank_info" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="reference_url" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="is_verified" Type="Boolean" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="image" Relationship="Self.FK_tenants_images" FromRole="tenants" ToRole="images" />
+          <NavigationProperty Name="leases" Relationship="Self.FK_leases_tenants" FromRole="tenants" ToRole="leases" />
+        </EntityType>
+        <Association Name="FK_properties_images">
+          <End Role="images" Type="Self.image" Multiplicity="1" />
+          <End Role="properties" Type="Self.property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="images">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="properties">
+              <PropertyRef Name="image_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tenants_images">
+          <End Role="images" Type="Self.image" Multiplicity="0..1" />
+          <End Role="tenants" Type="Self.tenant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="images">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tenants">
+              <PropertyRef Name="profile_image_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_leases_properties">
+          <End Role="properties" Type="Self.property" Multiplicity="1" />
+          <End Role="leases" Type="Self.leas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="properties">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="leases">
+              <PropertyRef Name="property_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_leases_tenants">
+          <End Role="tenants" Type="Self.tenant" Multiplicity="1" />
+          <End Role="leases" Type="Self.leas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tenants">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="leases">
+              <PropertyRef Name="tenant_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="testdb1Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="images" EntityType="Self.image" />
+          <EntitySet Name="leases" EntityType="Self.leas" />
+          <EntitySet Name="properties" EntityType="Self.property" />
+          <EntitySet Name="tenants" EntityType="Self.tenant" />
+          <AssociationSet Name="FK_properties_images" Association="Self.FK_properties_images">
+            <End Role="images" EntitySet="images" />
+            <End Role="properties" EntitySet="properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tenants_images" Association="Self.FK_tenants_images">
+            <End Role="images" EntitySet="images" />
+            <End Role="tenants" EntitySet="tenants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_leases_properties" Association="Self.FK_leases_properties">
+            <End Role="properties" EntitySet="properties" />
+            <End Role="leases" EntitySet="leases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_leases_tenants" Association="Self.FK_leases_tenants">
+            <End Role="tenants" EntitySet="tenants" />
+            <End Role="leases" EntitySet="leases" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="testdb1ModelStoreContainer" CdmEntityContainer="testdb1Entities">
+          <EntitySetMapping Name="images">
+            <EntityTypeMapping TypeName="testdb1Model.image">
+              <MappingFragment StoreEntitySet="images">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="image_url" ColumnName="image_url" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="uploaded_at" ColumnName="uploaded_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="leases">
+            <EntityTypeMapping TypeName="testdb1Model.leas">
+              <MappingFragment StoreEntitySet="leases">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="property_id" ColumnName="property_id" />
+                <ScalarProperty Name="tenant_id" ColumnName="tenant_id" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="rent_amount" ColumnName="rent_amount" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="lease_clauses" ColumnName="lease_clauses" />
+                <ScalarProperty Name="payment_due_day" ColumnName="payment_due_day" />
+                <ScalarProperty Name="utility_by_owner" ColumnName="utility_by_owner" />
+                <ScalarProperty Name="utility_by_tenant" ColumnName="utility_by_tenant" />
+                <ScalarProperty Name="renewal_term" ColumnName="renewal_term" />
+                <ScalarProperty Name="early_terminate_con" ColumnName="early_terminate_con" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="properties">
+            <EntityTypeMapping TypeName="testdb1Model.property">
+              <MappingFragment StoreEntitySet="properties">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="number_of_units" ColumnName="number_of_units" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="property_type" ColumnName="property_type" />
+                <ScalarProperty Name="size_in_sq_ft" ColumnName="size_in_sq_ft" />
+                <ScalarProperty Name="year_built" ColumnName="year_built" />
+                <ScalarProperty Name="rental_price" ColumnName="rental_price" />
+                <ScalarProperty Name="amenities" ColumnName="amenities" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="lease_terms" ColumnName="lease_terms" />
+                <ScalarProperty Name="image_id" ColumnName="image_id" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tenants">
+            <EntityTypeMapping TypeName="testdb1Model.tenant">
+              <MappingFragment StoreEntitySet="tenants">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="street_number" ColumnName="street_number" />
+                <ScalarProperty Name="street_name" ColumnName="street_name" />
+                <ScalarProperty Name="city_name" ColumnName="city_name" />
+                <ScalarProperty Name="postcode" ColumnName="postcode" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="phone_number" ColumnName="phone_number" />
+                <ScalarProperty Name="profile_image_id" ColumnName="profile_image_id" />
+                <ScalarProperty Name="date_of_birth" ColumnName="date_of_birth" />
+                <ScalarProperty Name="emergency_contact_name" ColumnName="emergency_contact_name" />
+                <ScalarProperty Name="emergency_contact_number" ColumnName="emergency_contact_number" />
+                <ScalarProperty Name="national_id" ColumnName="national_id" />
+                <ScalarProperty Name="employer_info" ColumnName="employer_info" />
+                <ScalarProperty Name="bank_info" ColumnName="bank_info" />
+                <ScalarProperty Name="reference_url" ColumnName="reference_url" />
+                <ScalarProperty Name="is_verified" ColumnName="is_verified" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

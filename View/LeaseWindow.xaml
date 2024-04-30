@@ -1,0 +1,131 @@
+﻿<Window x:Class="LLMS.View.LeaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LLMS.ViewModel"
+        mc:Ignorable="d"
+        Title="Lease - Landlord Management System" Height="768" Width="1024"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <local:LeaseWindowViewModel/>
+    </Window.DataContext>
+    
+    <Grid>
+        <DockPanel>
+            <!-- Top menu and project name -->
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_MainMenu">
+                    
+                    <MenuItem Header="Exit" Click="Exit_Click"/>
+                </MenuItem>
+                <MenuItem Header="Lease" Click="OpenLeaseWindow_Click"/>
+                <MenuItem Header="Tenant" Click="OpenTenantWindow_Click"/>
+                <MenuItem Header="Property" Click="OpenPropertyWindow_Click"/>
+            </Menu>
+
+            <!-- Status bar -->
+            <StatusBar DockPanel.Dock="Bottom">
+                <TextBlock Name="StatusBarText">Lease Information</TextBlock>
+            </StatusBar>
+
+            <!-- Main content area -->
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ListView Grid.Column="0" Name="listView" SelectionMode="Extended" SelectionChanged="ListView_SelectionChanged"
+                          ItemsSource="{Binding Leases}" SelectedItem="{Binding SelectedLease}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="ID" Width="30" DisplayMemberBinding="{Binding id}"/>
+                            <GridViewColumn Header="Property ID" Width="80" DisplayMemberBinding="{Binding property_id}"/>
+                            <GridViewColumn Header="Tenant ID" Width="80" DisplayMemberBinding="{Binding tenant_id}"/>
+                            <GridViewColumn Header="Start Date" Width="80" DisplayMemberBinding="{Binding start_date}"/>
+                            <GridViewColumn Header="End Date" Width="80" DisplayMemberBinding="{Binding end_date}"/>
+                            <GridViewColumn Header="Rent Amount" Width="80" DisplayMemberBinding="{Binding rent_amount}"/>
+                            <GridViewColumn Header="Created At" Width="80" DisplayMemberBinding="{Binding created_at}"/>
+                            <GridViewColumn Header="Updated At" Width="80" DisplayMemberBinding="{Binding updated_at}"/>
+                            <GridViewColumn Header="Lease Clauses" Width="120" DisplayMemberBinding="{Binding lease_clauses}"/>
+                            <GridViewColumn Header="Payment Due Day" Width="100" DisplayMemberBinding="{Binding payment_due_day}"/>
+                            <GridViewColumn Header="Utility by Owner" Width="120" DisplayMemberBinding="{Binding utility_by_owner}"/>
+                            <GridViewColumn Header="Utility by Tenant" Width="120" DisplayMemberBinding="{Binding utility_by_tenant}"/>
+                            <GridViewColumn Header="Renewal Term" Width="100" DisplayMemberBinding="{Binding renewal_term}"/>
+                            <GridViewColumn Header="Early Terminate Condition" Width="150" DisplayMemberBinding="{Binding early_terminate_con}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <!-- GridSplitter -->
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+
+                <!-- Right details display -->
+                <StackPanel Grid.Column="2" Orientation="Vertical">
+                    <!-- Details display -->
+
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Property ID:</Label>
+                        <ComboBox Width="120" Margin="10,0,0,0"
+              ItemsSource="{Binding PropertyIds}"
+              SelectedValue="{Binding PropertyId, Mode=TwoWay}"
+              DisplayMemberPath="."
+              SelectedValuePath="."/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Tenant ID:</Label>
+                        <ComboBox Width="120" Margin="10,0,0,0"
+              ItemsSource="{Binding TenantIds}"
+              SelectedValue="{Binding TenantId, Mode=TwoWay}"
+              DisplayMemberPath="."
+              SelectedValuePath="."/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Start Date:</Label>
+                        <DatePicker x:Name="dpStartDate" Width="120" Margin="10,0,0,0" SelectedDate="{Binding SelectedLease.start_date}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>End Date:</Label>
+                        <DatePicker x:Name="dpEndDate" Width="120" Margin="10,0,0,0" SelectedDate="{Binding SelectedLease.end_date}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Rent Amount:</Label>
+                        <TextBox x:Name="txtRentAmount" Width="120" Margin="10,0,0,0" Text="{Binding SelectedLease.rent_amount}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Lease Clauses:</Label>
+                        <TextBox x:Name="txtLeaseClauses" Width="360" Margin="10,0,0,0" Text="{Binding SelectedLease.lease_clauses}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Payment Due Day:</Label>
+                        <TextBox x:Name="txtPaymentDueDay" Width="120" Margin="10,0,0,0" Text="{Binding SelectedLease.payment_due_day}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Utility By Owner:</Label>
+                        <TextBox x:Name="txtUtilityByOwner" Width="120" Margin="10,0,0,0" Text="{Binding SelectedLease.utility_by_owner}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Utility By Tenant:</Label>
+                        <TextBox x:Name="txtUtilityByTenant" Width="120" Margin="10,0,0,0" Text="{Binding SelectedLease.utility_by_tenant}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Renewal Term:</Label>
+                        <TextBox x:Name="txtRenewalTerm" Height="60" Width="360" Margin="10,0,0,0" Text="{Binding SelectedLease.renewal_term}"/>
+                    </WrapPanel>
+                    <WrapPanel Margin="0,20,0,0">
+                        <Label>Early Terminate Condition:</Label>
+                        <TextBox x:Name="txtEarlyTerminateCon" Height="60" Width="360" Margin="10,0,0,0" Text="{Binding SelectedLease.early_terminate_con}"/>
+                    </WrapPanel>
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="20">
+                        <Button Content="Add" Command="{Binding AddCommand}" CommandParameter="Add" Width="107"/>
+                        <Button Content="Update" Command="{Binding UpdateCommand}" CommandParameter="Update" Width="115"/>
+                        <Button Content="Delete" Command="{Binding DeleteCommand}" CommandParameter="Delete" Width="103"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>
+
